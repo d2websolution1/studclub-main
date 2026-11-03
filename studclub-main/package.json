@@ -1,0 +1,19 @@
+{
+  "name": "studclub-monorepo",
+  "version": "1.0.0",
+  "description": "StuddClub VIP - Dynamic Full Stack (Frontend + Admin + Backend API + MongoDB)",
+  "scripts": {
+    "dev": "concurrently -k -p \"[{name}]\" -n \"BACKEND,ADMIN,FRONTEND\" -c \"blue,magenta,cyan\" \"npm run dev:backend\" \"npm run dev:admin\" \"npm run dev:frontend\"",
+    "dev:backend": "cd studclub-backend && npm run dev",
+    "dev:admin": "cd studclub-admin && npm run dev",
+    "dev:frontend": "cd studclub-main && npm run dev",
+    "start": "concurrently -k -p \"[{name}]\" -n \"BACKEND,ADMIN,FRONTEND\" -c \"blue,magenta,cyan\" \"npm run start:backend\" \"npm run start:admin\" \"npm run start:frontend\"",
+    "start:backend": "cd studclub-backend && npm start",
+    "start:admin": "cd studclub-admin && npm run start",
+    "start:frontend": "cd studclub-main && npm run start",
+    "build:all": "cd studclub-admin && npm run build && cd ../studclub-main && npm run build"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.6"
+  }
+}

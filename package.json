@@ -1,0 +1,13 @@
+{
+  "name": "studclub-root",
+  "version": "1.0.0",
+  "description": "StuddClub VIP - Dynamic Full Stack (Frontend + Admin + Backend API + MongoDB)",
+  "scripts": {
+    "dev": "npm --prefix studclub-main run dev",
+    "dev:backend": "npm --prefix studclub-main run dev:backend",
+    "dev:admin": "npm --prefix studclub-main run dev:admin",
+    "dev:frontend": "npm --prefix studclub-main run dev:frontend",
+    "start": "npm --prefix studclub-main run start",
+    "build": "npm --prefix studclub-main run build:all"
+  }
+}
