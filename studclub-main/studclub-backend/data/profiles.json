@@ -1,5 +1,33 @@
 [
   {
+    "name": "Tony stark",
+    "gender": "male",
+    "age": 24,
+    "category": "Elite Gentlemen",
+    "city": "Mumbai",
+    "locality": "mumbai",
+    "tagline": "best model",
+    "bio": "attrative",
+    "profession": "model",
+    "height": "5'7\"",
+    "badge": "Top Rated Studd",
+    "membershipTierRequired": "Gold STUDD VIP",
+    "consultationRate": "₹25,000 / Session",
+    "verified": true,
+    "languages": [
+      "English",
+      "Hindi"
+    ],
+    "services": [
+      "Aromatherapy Massage",
+      "Complete Companion"
+    ],
+    "photo": "/uploads/en_1_jpg-1794635375538-368117846.jpg",
+    "id": "m_1794635375556",
+    "rating": 4.9,
+    "reviewCount": 12
+  },
+  {
     "name": "dev",
     "gender": "male",
     "age": 24,

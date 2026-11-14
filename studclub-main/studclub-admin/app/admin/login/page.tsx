@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Lock, User, Eye, EyeOff, ShieldCheck, ArrowRight, Sparkles } from "lucide-react";
+import { Lock, User, Eye, EyeOff, ShieldCheck, ArrowRight } from "lucide-react";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -92,7 +92,7 @@ export default function AdminLoginPage() {
                 required
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder="admin"
+                placeholder="Enter username or email"
                 className="w-full pl-10 pr-4 py-2.5 bg-[#211B18] border border-white/10 rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[#E8C88A] transition-colors"
               />
             </div>
@@ -125,14 +125,6 @@ export default function AdminLoginPage() {
                 {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
             </div>
-          </div>
-
-          {/* Credentials Info Helper */}
-          <div className="p-3 bg-[#211B18]/70 border border-white/5 rounded-xl text-[11px] text-white/50 space-y-1">
-            <div className="flex items-center gap-1.5 text-[#E8C88A] font-semibold">
-              <Sparkles size={12} /> Default Access Details:
-            </div>
-            <p>Username: <code className="text-white bg-black/40 px-1 py-0.5 rounded">admin</code> | Password: <code className="text-white bg-black/40 px-1 py-0.5 rounded">admin123</code></p>
           </div>
 
           <button
