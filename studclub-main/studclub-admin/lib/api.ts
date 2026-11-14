@@ -1,93 +1,44 @@
-import { Profile, StatsData } from "../types";
+import { Profile, ALL_PROFILES } from "@/constants/data";
 
-export const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000";
+export const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 
-export function resolveImageUrl(photoPath: string): string {
-  if (!photoPath) return "/images/w1.jpg";
-  if (photoPath.startsWith("http://") || photoPath.startsWith("https://")) {
-    return photoPath;
+export function resolveImageUrl(photo?: string): string {
+  if (!photo) return "/images/w1.jpg";
+  if (photo.startsWith("http://") || photo.startsWith("https://")) {
+    return photo;
   }
-  if (photoPath.startsWith("/uploads/")) {
-    return `${BACKEND_URL}${photoPath}`;
+  if (photo.startsWith("/uploads/")) {
+    return `${BACKEND_URL}${photo}`;
   }
-  // Local static paths or relative paths
-  return photoPath;
+  return photo;
 }
 
-export async function getProfiles(filters?: {
-  gender?: string;
-  city?: string;
-  category?: string;
-  search?: string;
-  verified?: string;
-}): Promise<Profile[]> {
-  const query = new URLSearchParams();
-  if (filters?.gender && filters.gender !== "all") query.append("gender", filters.gender);
-  if (filters?.city && filters.city !== "All Cities") query.append("city", filters.city);
-  if (filters?.category && !filters.category.startsWith("All")) query.append("category", filters.category);
-  if (filters?.search) query.append("search", filters.search);
-  if (filters?.verified) query.append("verified", filters.verified);
+export async function fetchDynamicProfiles(): Promise<Profile[]> {
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 3500);
 
-  const url = `${API_BASE}/profiles${query.toString() ? `?${query.toString()}` : ""}`;
-  const res = await fetch(url, { cache: "no-store" });
-  if (!res.ok) throw new Error(`Failed to fetch profiles: ${res.statusText}`);
-  const data = await res.json();
-  return data.data || [];
-}
+    const res = await fetch(`${API_URL}/profiles`, {
+      signal: controller.signal,
+      cache: "no-store",
+    });
 
-export async function getStats(): Promise<StatsData> {
-  const res = await fetch(`${API_BASE}/stats`, { cache: "no-store" });
-  if (!res.ok) throw new Error(`Failed to fetch stats: ${res.statusText}`);
-  const data = await res.json();
-  return data.data;
-}
+    clearTimeout(timeoutId);
 
-export async function createProfile(formData: FormData): Promise<Profile> {
-  const res = await fetch(`${API_BASE}/profiles`, {
-    method: "POST",
-    body: formData,
-  });
-  if (!res.ok) {
-    const errorData = await res.json().catch(() => ({}));
-    throw new Error(errorData.message || "Failed to create profile");
+    if (!res.ok) {
+      console.warn("API responded with error, falling back to static profiles");
+      return ALL_PROFILES;
+    }
+
+    const data = await res.json();
+    if (data && data.success && Array.isArray(data.data) && data.data.length > 0) {
+      return data.data;
+    }
+
+    return ALL_PROFILES;
+  } catch (error) {
+    console.warn("Could not fetch profiles from backend API, using local profiles:", error);
+    return ALL_PROFILES;
   }
-  const data = await res.json();
-  return data.data;
-}
-
-export async function updateProfile(id: string, formData: FormData): Promise<Profile> {
-  const res = await fetch(`${API_BASE}/profiles/${id}`, {
-    method: "PUT",
-    body: formData,
-  });
-  if (!res.ok) {
-    const errorData = await res.json().catch(() => ({}));
-    throw new Error(errorData.message || "Failed to update profile");
-  }
-  const data = await res.json();
-  return data.data;
-}
-
-export async function deleteProfile(id: string): Promise<boolean> {
-  const res = await fetch(`${API_BASE}/profiles/${id}`, {
-    method: "DELETE",
-  });
-  if (!res.ok) {
-    const errorData = await res.json().catch(() => ({}));
-    throw new Error(errorData.message || "Failed to delete profile");
-  }
-  return true;
-}
-
-export async function toggleProfileVerified(id: string): Promise<Profile> {
-  const res = await fetch(`${API_BASE}/profiles/${id}/toggle-verified`, {
-    method: "PATCH",
-  });
-  if (!res.ok) {
-    const errorData = await res.json().catch(() => ({}));
-    throw new Error(errorData.message || "Failed to toggle verified status");
-  }
-  const data = await res.json();
-  return data.data;
 }

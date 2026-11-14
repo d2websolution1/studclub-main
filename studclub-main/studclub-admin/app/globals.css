@@ -2,8 +2,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0f0d0c;
-  --foreground: #f8f5f0;
+  --background: #ffffff;
+  --foreground: #171717;
 
   /* Copperleaf palette */
   --ivory: #F8F5F0;
@@ -16,30 +16,39 @@
   --oxblood: #8A2E2E;
   --oxblood-soft: #B8483F;
   --oxblood-deep: #5E1F1F;
-  --ink: #191412;
-  --ink-card: #211B18;
-  --ink-border: #382D27;
+  --ink: #2B2420;
+  --ink-soft: #6B5F52;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+.font-display {
+  font-family: 'Poppins', sans-serif;
+}
+
+.font-body {
+  font-family: 'Poppins', sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: 'Poppins', sans-serif;
-  overflow-x: hidden;
-}
-
-/* Custom scrollbars */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-::-webkit-scrollbar-track {
-  background: #15110e;
-}
-::-webkit-scrollbar-thumb {
-  background: #382d27;
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #b8783d;
 }

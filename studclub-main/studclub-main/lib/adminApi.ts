@@ -90,3 +90,4 @@ export async function toggleProfileVerified(id: string): Promise<Profile> {
   const data = await res.json();
   return data.data;
 }
+

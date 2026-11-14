@@ -83,3 +83,4 @@ export const MEMBERSHIP_TIERS = [
   "Gold STUDD VIP",
   "Platinum Elite"
 ];
+

@@ -547,3 +547,4 @@ export function ProfileModal({ isOpen, onClose, onSubmit, initialData }: Profile
     </div>
   );
 }
+
