@@ -2,6 +2,7 @@ import path from "path";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  output: "export",
   turbopack: {
     root: path.resolve(__dirname)
   },
@@ -9,5 +10,6 @@ const nextConfig: NextConfig = {
     unoptimized: true
   }
 };
+
 
 export default nextConfig;

@@ -5,9 +5,11 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "postbuild": "node -e \"const fs=require('fs'),ht='DirectoryIndex index.html\\n<IfModule mod_rewrite.c>\\nRewriteEngine On\\nRewriteCond %{REQUEST_URI} ^/_next/ [NC,OR]\\nRewriteCond %{REQUEST_URI} \\\\.(css|js|svg|png|jpg|jpeg|gif|webp|woff|woff2|ttf|eot|ico|json)$ [NC]\\nRewriteRule ^ - [L]\\nRewriteCond %{REQUEST_FILENAME} -f [OR]\\nRewriteCond %{REQUEST_FILENAME} -d\\nRewriteRule ^ - [L]\\nRewriteCond %{REQUEST_FILENAME}.html -f\\nRewriteRule ^(.*)$ $1.html [L]\\nRewriteRule ^ index.html [L]\\n</IfModule>\\n'; fs.writeFileSync('out/.htaccess', ht);\"",
     "start": "next start",
     "lint": "eslint"
   },
+
   "dependencies": {
     "framer-motion": "^12.43.0",
     "lucide-react": "^1.28.0",
