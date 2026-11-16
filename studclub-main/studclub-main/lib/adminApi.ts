@@ -1,6 +1,6 @@
 import { Profile, StatsData } from "../types/admin";
 
-const DEFAULT_BACKEND = "https://studclub-main.onrender.com";
+const DEFAULT_BACKEND = "https://api.partyplayboys.com";
 
 export function getBackendUrl(): string {
   if (typeof window !== "undefined") {
