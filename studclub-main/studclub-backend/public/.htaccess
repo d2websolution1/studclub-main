@@ -9,5 +9,6 @@ RewriteCond %{REQUEST_FILENAME}.html -f
 RewriteRule ^(.*)$ $1.html [L]
 RewriteCond %{DOCUMENT_ROOT}/$1/index.html -f
 RewriteRule ^(.*)/?$ $1/index.html [L]
+RewriteCond %{REQUEST_URI} !^/api [NC]
 RewriteRule ^ index.html [L]
 </IfModule>
