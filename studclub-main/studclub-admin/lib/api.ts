@@ -1,14 +1,13 @@
 import { Profile, ALL_PROFILES } from "@/constants/data";
 
+const DEFAULT_BACKEND = "https://studclub-main.onrender.com";
+
 export function getBackendUrl(): string {
   if (typeof window !== "undefined") {
     const custom = localStorage.getItem("studdclub_backend_url");
     if (custom) return custom.replace(/\/api\/?$/, "");
-    if (window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1") {
-      return window.location.origin;
-    }
   }
-  return process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000";
+  return process.env.NEXT_PUBLIC_BACKEND_URL || DEFAULT_BACKEND;
 }
 
 export function getApiBase(): string {
@@ -18,11 +17,10 @@ export function getApiBase(): string {
       const clean = custom.replace(/\/+$/, "");
       return clean.endsWith("/api") ? clean : `${clean}/api`;
     }
-    if (window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1") {
-      return `${window.location.origin}/api`;
-    }
   }
-  return process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+  const base = process.env.NEXT_PUBLIC_BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || DEFAULT_BACKEND;
+  const clean = base.replace(/\/+$/, "");
+  return clean.endsWith("/api") ? clean : `${clean}/api`;
 }
 
 export const BACKEND_URL = getBackendUrl();
