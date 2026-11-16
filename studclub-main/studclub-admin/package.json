@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev -p 3001",
     "build": "next build",
-    "postbuild": "node -e \"const fs=require('fs'); if(fs.existsSync('out/admin/index.html')) fs.copyFileSync('out/admin/index.html','out/admin.html'); if(fs.existsSync('out/admin/login/index.html')) fs.copyFileSync('out/admin/login/index.html','out/admin/login.html'); const ht='DirectoryIndex index.html\\n<IfModule mod_rewrite.c>\\nRewriteEngine On\\nRewriteBase /\\nRewriteCond %{REQUEST_FILENAME} -f [OR]\\nRewriteCond %{REQUEST_FILENAME} -d\\nRewriteRule ^ - [L]\\nRewriteCond %{REQUEST_FILENAME}.html -f\\nRewriteRule ^(.*)$ $1.html [L]\\nRewriteCond %{DOCUMENT_ROOT}/$1/index.html -f\\nRewriteRule ^(.*)/?$ $1/index.html [L]\\nRewriteCond %{REQUEST_URI} !^/api [NC]\\nRewriteRule ^ index.html [L]\\n</IfModule>\\n'; fs.writeFileSync('out/.htaccess', ht);\"",
+    "postbuild": "node -e \"const fs=require('fs'); if(fs.existsSync('out/admin/index.html')) fs.copyFileSync('out/admin/index.html','out/admin.html'); if(fs.existsSync('out/admin/login/index.html')) fs.copyFileSync('out/admin/login/index.html','out/admin/login.html'); const ht='DirectoryIndex index.html\\n<IfModule mod_rewrite.c>\\nRewriteEngine On\\nRewriteBase /\\nRewriteRule ^api/(.*) http://127.0.0.1:5000/api/$1 [P,L]\\nRewriteCond %{REQUEST_FILENAME} -f [OR]\\nRewriteCond %{REQUEST_FILENAME} -d\\nRewriteRule ^ - [L]\\nRewriteCond %{REQUEST_FILENAME}.html -f\\nRewriteRule ^(.*)$ $1.html [L]\\nRewriteCond %{DOCUMENT_ROOT}/$1/index.html -f\\nRewriteRule ^(.*)/?$ $1/index.html [L]\\nRewriteCond %{REQUEST_URI} !^/api [NC]\\nRewriteRule ^ index.html [L]\\n</IfModule>\\n'; fs.writeFileSync('out/.htaccess', ht);\"",
     "start": "next start -p 3001",
     "lint": "eslint"
   },
