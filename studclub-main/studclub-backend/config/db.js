@@ -2,11 +2,13 @@ const mongoose = require('mongoose');
 
 let isConnected = false;
 
+const DEFAULT_CLOUD_URI = 'mongodb+srv://princerajpit5868_db_user:MsouuSylvj7Uknbs@cluster0.typctiv.mongodb.net/studclub?retryWrites=true&w=majority';
+
 const connectDB = async () => {
-  const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/studclub';
+  const uri = process.env.MONGODB_URI || DEFAULT_CLOUD_URI;
   try {
     const conn = await mongoose.connect(uri, {
-      serverSelectionTimeoutMS: 3000, // Timeout fast if mongo is not running
+      serverSelectionTimeoutMS: 5000,
     });
     isConnected = true;
     console.log(` MongoDB Connected: ${conn.connection.host}`);
