@@ -1,7 +1,32 @@
 import { Profile, StatsData } from "../types/admin";
 
-export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000";
-export const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+export function getBackendUrl(): string {
+  if (typeof window !== "undefined") {
+    const custom = localStorage.getItem("studdclub_backend_url");
+    if (custom) return custom.replace(/\/api\/?$/, "");
+    if (window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1") {
+      return window.location.origin;
+    }
+  }
+  return process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000";
+}
+
+export function getApiBase(): string {
+  if (typeof window !== "undefined") {
+    const custom = localStorage.getItem("studdclub_backend_url");
+    if (custom) {
+      const clean = custom.replace(/\/+$/, "");
+      return clean.endsWith("/api") ? clean : `${clean}/api`;
+    }
+    if (window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1") {
+      return `${window.location.origin}/api`;
+    }
+  }
+  return process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+}
+
+export const BACKEND_URL = getBackendUrl();
+export const API_BASE = getApiBase();
 
 export function resolveImageUrl(photoPath?: string): string {
   if (!photoPath) return "/images/w1.jpg";
@@ -9,7 +34,7 @@ export function resolveImageUrl(photoPath?: string): string {
     return photoPath;
   }
   if (photoPath.startsWith("/uploads/")) {
-    return `${BACKEND_URL}${photoPath}`;
+    return `${getBackendUrl()}${photoPath}`;
   }
   return photoPath;
 }
@@ -28,7 +53,8 @@ export async function getProfiles(filters?: {
   if (filters?.search) query.append("search", filters.search);
   if (filters?.verified) query.append("verified", filters.verified);
 
-  const url = `${API_BASE}/profiles${query.toString() ? `?${query.toString()}` : ""}`;
+  const apiBase = getApiBase();
+  const url = `${apiBase}/profiles${query.toString() ? `?${query.toString()}` : ""}`;
   const res = await fetch(url, { cache: "no-store" });
   if (!res.ok) throw new Error(`Failed to fetch profiles: ${res.statusText}`);
   const data = await res.json();
@@ -36,14 +62,16 @@ export async function getProfiles(filters?: {
 }
 
 export async function getStats(): Promise<StatsData> {
-  const res = await fetch(`${API_BASE}/stats`, { cache: "no-store" });
+  const apiBase = getApiBase();
+  const res = await fetch(`${apiBase}/stats`, { cache: "no-store" });
   if (!res.ok) throw new Error(`Failed to fetch stats: ${res.statusText}`);
   const data = await res.json();
   return data.data;
 }
 
 export async function createProfile(formData: FormData): Promise<Profile> {
-  const res = await fetch(`${API_BASE}/profiles`, {
+  const apiBase = getApiBase();
+  const res = await fetch(`${apiBase}/profiles`, {
     method: "POST",
     body: formData,
   });
@@ -56,7 +84,8 @@ export async function createProfile(formData: FormData): Promise<Profile> {
 }
 
 export async function updateProfile(id: string, formData: FormData): Promise<Profile> {
-  const res = await fetch(`${API_BASE}/profiles/${id}`, {
+  const apiBase = getApiBase();
+  const res = await fetch(`${apiBase}/profiles/${id}`, {
     method: "PUT",
     body: formData,
   });
@@ -69,7 +98,8 @@ export async function updateProfile(id: string, formData: FormData): Promise<Pro
 }
 
 export async function deleteProfile(id: string): Promise<boolean> {
-  const res = await fetch(`${API_BASE}/profiles/${id}`, {
+  const apiBase = getApiBase();
+  const res = await fetch(`${apiBase}/profiles/${id}`, {
     method: "DELETE",
   });
   if (!res.ok) {
@@ -80,7 +110,8 @@ export async function deleteProfile(id: string): Promise<boolean> {
 }
 
 export async function toggleProfileVerified(id: string): Promise<Profile> {
-  const res = await fetch(`${API_BASE}/profiles/${id}/toggle-verified`, {
+  const apiBase = getApiBase();
+  const res = await fetch(`${apiBase}/profiles/${id}/toggle-verified`, {
     method: "PATCH",
   });
   if (!res.ok) {
