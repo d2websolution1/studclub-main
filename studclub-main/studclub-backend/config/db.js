@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 let isConnected = false;
 
-const DEFAULT_CLOUD_URI = 'mongodb+srv://princerajpit5868_db_user:MsouuSylvj7Uknbs@cluster0.typctiv.mongodb.net/studclub?retryWrites=true&w=majority';
+const DEFAULT_CLOUD_URI = 'mongodb+srv://dg142814_db_user:io1gcqGBM3928mmE@cluster0.ya0rq2s.mongodb.net/studclub?retryWrites=true&w=majority';
 
 const connectDB = async () => {
   const uri = process.env.MONGODB_URI || DEFAULT_CLOUD_URI;

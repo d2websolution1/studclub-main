@@ -28,14 +28,24 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 // Static folder for uploaded photos & fallback images
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/images', express.static(path.join(__dirname, 'public', 'images')));
-app.use('/images', express.static(path.join(__dirname, '..', 'studclub-main', 'public', 'images')));
 
-const publicDir = path.join(__dirname, 'public');
-if (fs.existsSync(publicDir)) {
-  app.use(express.static(publicDir));
-}
+// Root status endpoint - API ONLY (No frontend website here)
+app.get('/', (req, res) => {
+  res.json({
+    name: 'StuddClub VIP Backend API',
+    status: 'online',
+    version: '1.0.0',
+    database: getIsConnected() ? 'MongoDB (Connected)' : 'Local JSON Store (Active & Synced)',
+    endpoints: {
+      health: '/api/health',
+      stats: '/api/stats',
+      profiles: '/api/profiles',
+      uploads: '/uploads'
+    }
+  });
+});
 
-// Root & Health check
+// Health check
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'online',
@@ -58,21 +68,10 @@ app.get('/api/stats', async (req, res) => {
 app.use('/api/profiles', profileRoutes);
 app.use('/api/upload', uploadRoutes);
 
-// Static Frontend Route Fallback (Admin & SPA)
-if (fs.existsSync(publicDir)) {
-  app.get('/admin/login', (req, res) => {
-    res.sendFile(path.join(publicDir, 'admin', 'login', 'index.html'));
-  });
-  app.get('/admin', (req, res) => {
-    res.sendFile(path.join(publicDir, 'admin', 'index.html'));
-  });
-  app.use((req, res, next) => {
-    if (req.method === 'GET' && !req.path.startsWith('/api') && !req.path.startsWith('/uploads')) {
-      return res.sendFile(path.join(publicDir, 'index.html'));
-    }
-    next();
-  });
-}
+// Redirect /admin on API subdomain to the main domain
+app.use('/admin', (req, res) => {
+  res.redirect(`https://partyplayboys.com/admin${req.url}`);
+});
 
 // 404 handler for API routes
 app.use((req, res) => {
